@@ -6,7 +6,8 @@ data class AccessibilityIssue(
     val view: View,
     val title: String,
     val description: String,
-    val severity: Severity = Severity.WARNING
+    val severity: Severity = Severity.WARNING,
+    val customBounds: android.graphics.Rect? = null
 ) {
     enum class Severity {
         INFO, WARNING, ERROR

@@ -39,13 +39,25 @@ class HighlightOverlay @JvmOverloads constructor(
 
         issues.forEach { issue ->
             val view = issue.view
-            view.getLocationOnScreen(tempLocation)
             this.getLocationOnScreen(tempOverlayLocation)
 
-            val left = (tempLocation[0] - tempOverlayLocation[0]).toFloat()
-            val top = (tempLocation[1] - tempOverlayLocation[1]).toFloat()
-            val right = left + view.width
-            val bottom = top + view.height
+            val left: Float
+            val top: Float
+            val right: Float
+            val bottom: Float
+
+            if (issue.customBounds != null) {
+                left = (issue.customBounds.left - tempOverlayLocation[0]).toFloat()
+                top = (issue.customBounds.top - tempOverlayLocation[1]).toFloat()
+                right = (issue.customBounds.right - tempOverlayLocation[0]).toFloat()
+                bottom = (issue.customBounds.bottom - tempOverlayLocation[1]).toFloat()
+            } else {
+                view.getLocationOnScreen(tempLocation)
+                left = (tempLocation[0] - tempOverlayLocation[0]).toFloat()
+                top = (tempLocation[1] - tempOverlayLocation[1]).toFloat()
+                right = left + view.width
+                bottom = top + view.height
+            }
 
             // Set color based on severity
             val color = when (issue.severity) {

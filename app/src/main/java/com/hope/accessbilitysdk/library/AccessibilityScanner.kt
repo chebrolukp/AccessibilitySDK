@@ -6,9 +6,14 @@ import android.view.ViewGroup
 
 class AccessibilityScanner(private val detectors: List<AccessibilityDetector>) {
 
+    private val composeScanner = ComposeScanner()
+
     fun scan(rootView: View): List<AccessibilityIssue> {
         val issues = mutableListOf<AccessibilityIssue>()
         traverse(rootView, issues)
+        
+        // Also scan Compose if present
+        issues.addAll(composeScanner.scan(rootView))
         
         if (issues.isNotEmpty()) {
             Log.w("AccessibilitySDK", "--- Accessibility Report for ${rootView.context.javaClass.simpleName} ---")

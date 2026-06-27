@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +48,18 @@ class MainActivity : ComponentActivity() {
                                     setPadding(20, 20, 20, 20)
                                 }
                             }
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text("Compose Accessibility Issue:")
+
+                        // Clickable Box with NO label and SMALL size
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp) // Too small (Warning)
+                                .clickable { /* Do nothing */ }
+                                // Missing contentDescription (Error)
                         )
                     }
                 }
