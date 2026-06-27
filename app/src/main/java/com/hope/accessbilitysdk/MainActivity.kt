@@ -61,6 +61,26 @@ class MainActivity : ComponentActivity() {
                                 .clickable { /* Do nothing */ }
                                 // Missing contentDescription (Error)
                         )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text("Duplicate Labels Test:")
+                        
+                        // Two identical buttons
+                        AndroidView(
+                            factory = { context ->
+                                android.widget.Button(context).apply {
+                                    text = "Settings"
+                                }
+                            }
+                        )
+                        AndroidView(
+                            factory = { context ->
+                                android.widget.Button(context).apply {
+                                    text = "Settings"
+                                }
+                            }
+                        )
                     }
                 }
             }

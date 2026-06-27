@@ -7,10 +7,14 @@ import android.view.ViewGroup
 class AccessibilityScanner(private val detectors: List<AccessibilityDetector>) {
 
     private val composeScanner = ComposeScanner()
+    private val duplicateDetector = DuplicateLabelDetector()
 
     fun scan(rootView: View): List<AccessibilityIssue> {
         val issues = mutableListOf<AccessibilityIssue>()
         traverse(rootView, issues)
+        
+        // Add duplicate label issues
+        issues.addAll(duplicateDetector.check(rootView))
         
         // Also scan Compose if present
         issues.addAll(composeScanner.scan(rootView))
