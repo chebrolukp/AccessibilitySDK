@@ -10,7 +10,8 @@ object AccessibilityMonitor {
     private val scanner = AccessibilityScanner(
         listOf(
             ContentDescriptionDetector(),
-            TouchTargetDetector()
+            TouchTargetDetector(),
+            ContrastDetector()
         )
     )
 
