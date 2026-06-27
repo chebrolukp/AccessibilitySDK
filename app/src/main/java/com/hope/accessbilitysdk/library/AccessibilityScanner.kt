@@ -8,6 +8,7 @@ class AccessibilityScanner(private val config: AccessibilityConfig) {
 
     private val composeScanner = ComposeScanner()
     private val duplicateDetector = DuplicateLabelDetector()
+    private val focusOrderDetector = FocusOrderDetector()
     
     private val detectors = mutableListOf<AccessibilityDetector>().apply {
         if (config.checkContentDescriptions) add(ContentDescriptionDetector())
@@ -22,6 +23,11 @@ class AccessibilityScanner(private val config: AccessibilityConfig) {
         // Add duplicate label issues
         if (config.checkDuplicates) {
             issues.addAll(duplicateDetector.check(rootView))
+        }
+
+        // Add focus order issues
+        if (config.checkFocusOrder) {
+            issues.addAll(focusOrderDetector.check(rootView))
         }
         
         // Also scan Compose if present

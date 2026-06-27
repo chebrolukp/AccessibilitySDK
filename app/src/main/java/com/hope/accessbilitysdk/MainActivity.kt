@@ -1,6 +1,7 @@
 package com.hope.accessbilitysdk
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -79,6 +80,36 @@ class MainActivity : ComponentActivity() {
                                 android.widget.Button(context).apply {
                                     text = "Settings"
                                 }
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text("Focus Cycle Test:")
+                        
+                        // Creating a focus cycle: Button A -> Button B -> Button A
+                        AndroidView(
+                            factory = { context ->
+                                val layout = android.widget.LinearLayout(context).apply {
+                                    orientation = android.widget.LinearLayout.HORIZONTAL
+                                }
+                                
+                                val buttonA = android.widget.Button(context).apply {
+                                    text = "Button A"
+                                    id = View.generateViewId()
+                                }
+                                
+                                val buttonB = android.widget.Button(context).apply {
+                                    text = "Button B"
+                                    id = View.generateViewId()
+                                }
+                                
+                                buttonA.nextFocusForwardId = buttonB.id
+                                buttonB.nextFocusForwardId = buttonA.id
+                                
+                                layout.addView(buttonA)
+                                layout.addView(buttonB)
+                                layout
                             }
                         )
                     }
