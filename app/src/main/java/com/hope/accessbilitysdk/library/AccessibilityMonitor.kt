@@ -7,15 +7,15 @@ import android.view.View
 
 object AccessibilityMonitor {
 
-    private val scanner = AccessibilityScanner(
-        listOf(
-            ContentDescriptionDetector(),
-            TouchTargetDetector(),
-            ContrastDetector()
-        )
-    )
+    private var config = AccessibilityConfig()
+    private var scanner = AccessibilityScanner(config)
 
-    fun install(application: Application) {
+    fun install(application: Application, block: (AccessibilityConfig.() -> Unit)? = null) {
+        val newConfig = AccessibilityConfig()
+        block?.invoke(newConfig)
+        config = newConfig
+        scanner = AccessibilityScanner(config)
+
         application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
             override fun onActivityStarted(activity: Activity) {}
@@ -25,12 +25,25 @@ object AccessibilityMonitor {
                 rootView.post {
                     val issues = scanner.scan(rootView)
                     if (issues.isNotEmpty()) {
-                        val overlay = HighlightOverlay(activity, issues = issues)
                         val decorView = activity.window.decorView as android.view.ViewGroup
-                        decorView.addView(overlay, android.view.ViewGroup.LayoutParams(
-                            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                            android.view.ViewGroup.LayoutParams.MATCH_PARENT
-                        ))
+                        
+                        // Add highlighting
+                        if (config.showHighlightOverlay) {
+                            val highlightOverlay = HighlightOverlay(activity, issues = issues)
+                            decorView.addView(highlightOverlay, android.view.ViewGroup.LayoutParams(
+                                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                                android.view.ViewGroup.LayoutParams.MATCH_PARENT
+                            ))
+                        }
+
+                        // Add floating summary
+                        if (config.showSummaryOverlay) {
+                            val summaryOverlay = SummaryOverlay(activity, issues = issues)
+                            decorView.addView(summaryOverlay, android.view.ViewGroup.LayoutParams(
+                                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                                android.view.ViewGroup.LayoutParams.MATCH_PARENT
+                            ))
+                        }
                     }
                 }
             }
