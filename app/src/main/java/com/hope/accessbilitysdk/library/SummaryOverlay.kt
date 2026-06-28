@@ -4,14 +4,20 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
-import android.view.View
+import androidx.core.graphics.toColorInt
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 
-class SummaryOverlay(context: Context, private val issues: List<AccessibilityIssue>) : FrameLayout(context) {
+class SummaryOverlay @JvmOverloads constructor(
+    context: Context,
+    private val issues: List<AccessibilityIssue> = emptyList(),
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
         val errorCount = issues.count { it.severity == AccessibilityIssue.Severity.ERROR }
@@ -20,11 +26,16 @@ class SummaryOverlay(context: Context, private val issues: List<AccessibilityIss
         val backgroundDrawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadius = 40f
-            setColor(Color.parseColor("#E0333333"))
+            setColor("#E0333333".toColorInt())
             setStroke(2, Color.WHITE)
         }
 
-        val cardView = LinearLayout(context).apply {
+        val cardView = object : LinearLayout(context) {
+            override fun performClick(): Boolean {
+                super.performClick()
+                return true
+            }
+        }.apply {
             orientation = LinearLayout.VERTICAL
             setPadding(40, 20, 40, 20)
             background = backgroundDrawable
@@ -32,7 +43,7 @@ class SummaryOverlay(context: Context, private val issues: List<AccessibilityIss
             
             val lp = LayoutParams(
                 LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
+                LayoutParams.WRAP_CONTENT,
             ).apply {
                 gravity = Gravity.TOP or Gravity.END
                 topMargin = 150
@@ -41,8 +52,9 @@ class SummaryOverlay(context: Context, private val issues: List<AccessibilityIss
             layoutParams = lp
         }
 
+        val titleText = "A11y Issues (${issues.size})"
         val title = TextView(context).apply {
-            text = "A11y Issues (${issues.size})"
+            text = titleText
             setTextColor(Color.WHITE)
             setTypeface(null, Typeface.BOLD)
             textSize = 14f
@@ -50,18 +62,20 @@ class SummaryOverlay(context: Context, private val issues: List<AccessibilityIss
         cardView.addView(title)
 
         if (errorCount > 0) {
+            val errorLabel = "• $errorCount Errors"
             val errorText = TextView(context).apply {
-                text = "• $errorCount Errors"
-                setTextColor(Color.parseColor("#FF5252")) // Bright Red
+                text = errorLabel
+                setTextColor("#FF5252".toColorInt()) // Bright Red
                 textSize = 12f
             }
             cardView.addView(errorText)
         }
 
         if (warningCount > 0) {
+            val warningLabel = "• $warningCount Warnings"
             val warningText = TextView(context).apply {
-                text = "• $warningCount Warnings"
-                setTextColor(Color.parseColor("#FFD740")) // Bright Orange/Amber
+                text = warningLabel
+                setTextColor("#FFD740".toColorInt()) // Bright Orange/Amber
                 textSize = 12f
             }
             cardView.addView(warningText)
@@ -77,6 +91,7 @@ class SummaryOverlay(context: Context, private val issues: List<AccessibilityIss
                 MotionEvent.ACTION_DOWN -> {
                     dX = v.x - event.rawX
                     dY = v.y - event.rawY
+                    v.performClick()
                 }
                 MotionEvent.ACTION_MOVE -> {
                     v.x = event.rawX + dX

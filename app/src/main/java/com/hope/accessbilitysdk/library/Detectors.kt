@@ -1,12 +1,13 @@
 package com.hope.accessbilitysdk.library
 
 import android.view.View
+import androidx.core.view.isVisible
 import android.widget.TextView
 
 class ContentDescriptionDetector : AccessibilityDetector {
     override fun check(view: View): AccessibilityIssue? {
         // Flag anything clickable that doesn't have a label
-        if (view.isClickable && view.importantForAccessibility != View.IMPORTANT_FOR_ACCESSIBILITY_NO) {
+        if (view.isClickable && (view.importantForAccessibility != View.IMPORTANT_FOR_ACCESSIBILITY_NO)) {
             val hasLabel = !view.contentDescription.isNullOrEmpty() || (view is TextView && view.text.isNotEmpty())
             
             if (!hasLabel) {
@@ -14,7 +15,7 @@ class ContentDescriptionDetector : AccessibilityDetector {
                     view = view,
                     title = "Missing Label",
                     description = "${view.javaClass.simpleName} is clickable but has no contentDescription or text. Screen readers will just say 'unlabelled button'.",
-                    severity = AccessibilityIssue.Severity.ERROR
+                    severity = AccessibilityIssue.Severity.ERROR,
                 )
             }
         }
@@ -24,7 +25,7 @@ class ContentDescriptionDetector : AccessibilityDetector {
 
 class TouchTargetDetector : AccessibilityDetector {
     override fun check(view: View): AccessibilityIssue? {
-        if (view.isClickable && view.visibility == View.VISIBLE) {
+        if (view.isClickable && view.isVisible) {
             val density = view.resources.displayMetrics.density
             val widthDp = view.width / density
             val heightDp = view.height / density

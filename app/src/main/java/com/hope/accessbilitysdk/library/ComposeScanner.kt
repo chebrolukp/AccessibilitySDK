@@ -8,7 +8,6 @@ import androidx.compose.ui.semantics.SemanticsOwner
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.semantics.AccessibilityAction
 import kotlin.math.roundToInt
 
 class ComposeScanner {
@@ -45,7 +44,7 @@ class ComposeScanner {
         return try {
             val method = view.javaClass.methods.firstOrNull { it.name == "getSemanticsOwner" }
             method?.invoke(view) as? SemanticsOwner
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

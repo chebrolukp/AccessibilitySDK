@@ -2,6 +2,7 @@ package com.hope.accessbilitysdk.library
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 
 class FocusOrderDetector {
 
@@ -17,32 +18,36 @@ class FocusOrderDetector {
         var current: View? = focusableViews.first()
         val path = mutableListOf<View>()
 
-        while (current != null && current !in visited) {
+        while (current != null && (current !in visited)) {
             visited.add(current)
             path.add(current)
             @Suppress("WrongConstant")
             current = current.focusSearch(View.FOCUS_FORWARD)
         }
 
-        if (current != null && current in visited) {
+        if (current != null && (current in visited)) {
             // Focus cycle detected
-            issues.add(AccessibilityIssue(
-                view = current,
-                title = "Focus Cycle Detected",
-                description = "Keyboard focus trapped in a loop. Navigation might never reach other parts of the screen.",
-                severity = AccessibilityIssue.Severity.ERROR
-            ))
+            issues.add(
+                AccessibilityIssue(
+                    view = current,
+                    title = "Focus Cycle Detected",
+                    description = "Keyboard focus trapped in a loop. Navigation might never reach other parts of the screen.",
+                    severity = AccessibilityIssue.Severity.ERROR,
+                )
+            )
         }
 
         // Check for unreachable focusable views
         focusableViews.forEach { view ->
-            if (view !in visited && view.visibility == View.VISIBLE) {
-                issues.add(AccessibilityIssue(
-                    view = view,
-                    title = "Unreachable Focus",
-                    description = "This view is focusable but cannot be reached via standard 'Forward' navigation (e.g., Tab key).",
-                    severity = AccessibilityIssue.Severity.WARNING
-                ))
+            if (view !in visited && view.isVisible) {
+                issues.add(
+                    AccessibilityIssue(
+                        view = view,
+                        title = "Unreachable Focus",
+                        description = "This view is focusable but cannot be reached via standard 'Forward' navigation (e.g., Tab key).",
+                        severity = AccessibilityIssue.Severity.WARNING,
+                    )
+                )
             }
         }
 
@@ -50,13 +55,13 @@ class FocusOrderDetector {
     }
 
     private fun collectFocusableViews(view: View, focusableViews: MutableList<View>) {
-        if (view.isFocusable && view.visibility == View.VISIBLE) {
+        if (view.isFocusable && view.isVisible) {
             focusableViews.add(view)
         }
 
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                collectFocusableViews(view.getChildAt(i), focusableViews)
+        (view as? ViewGroup)?.let { group ->
+            for (i in 0 until group.childCount) {
+                collectFocusableViews(group.getChildAt(i), focusableViews)
             }
         }
     }

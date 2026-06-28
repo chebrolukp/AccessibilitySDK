@@ -12,14 +12,16 @@ class DuplicateLabelDetector {
 
         val issues = mutableListOf<AccessibilityIssue>()
         labelMap.forEach { (label, views) ->
-            if (views.size > 1 && label.isNotBlank()) {
+            if ((views.size > 1) && label.isNotBlank()) {
                 views.forEach { view ->
-                    issues.add(AccessibilityIssue(
-                        view = view,
-                        title = "Duplicate Label",
-                        description = "Multiple elements have the same label: '$label'. This can be confusing for screen reader users.",
-                        severity = AccessibilityIssue.Severity.WARNING
-                    ))
+                    issues.add(
+                        AccessibilityIssue(
+                            view = view,
+                            title = "Duplicate Label",
+                            description = "Multiple elements have the same label: '$label'. This can be confusing for screen reader users.",
+                            severity = AccessibilityIssue.Severity.WARNING,
+                        )
+                    )
                 }
             }
         }
@@ -27,14 +29,13 @@ class DuplicateLabelDetector {
     }
 
     private fun collectLabels(view: View, labelMap: MutableMap<String, MutableList<View>>) {
-        val label = getLabel(view)
-        if (label != null) {
+        getLabel(view)?.let { label ->
             labelMap.getOrPut(label) { mutableListOf() }.add(view)
         }
 
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                collectLabels(view.getChildAt(i), labelMap)
+        (view as? ViewGroup)?.let { group ->
+            for (i in 0 until group.childCount) {
+                collectLabels(group.getChildAt(i), labelMap)
             }
         }
     }

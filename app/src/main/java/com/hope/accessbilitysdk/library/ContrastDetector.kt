@@ -3,13 +3,16 @@ package com.hope.accessbilitysdk.library
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
+import androidx.core.view.isVisible
 import android.widget.TextView
 import java.util.Locale
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.pow
 
 class ContrastDetector : AccessibilityDetector {
     override fun check(view: View): AccessibilityIssue? {
-        if (view is TextView && view.visibility == View.VISIBLE && view.text.isNotEmpty()) {
+        if ((view is TextView) && view.isVisible && view.text.isNotEmpty()) {
             val textColor = view.currentTextColor
             val backgroundColor = getBackgroundColor(view)
 
@@ -21,7 +24,7 @@ class ContrastDetector : AccessibilityDetector {
                         view = view,
                         title = "Low Contrast",
                         description = String.format(Locale.US, "Contrast ratio is %.2f:1. WCAG AA requires 4.5:1.", ratio),
-                        severity = AccessibilityIssue.Severity.WARNING
+                        severity = AccessibilityIssue.Severity.WARNING,
                     )
                 }
             }
@@ -32,7 +35,7 @@ class ContrastDetector : AccessibilityDetector {
     private fun calculateContrastRatio(foreground: Int, background: Int): Double {
         val l1 = calculateLuminance(foreground)
         val l2 = calculateLuminance(background)
-        return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)
+        return (max(l1, l2) + 0.05) / (min(l1, l2) + 0.05)
     }
 
     private fun calculateLuminance(color: Int): Double {
@@ -59,10 +62,10 @@ class ContrastDetector : AccessibilityDetector {
             }
             // If the view is the root or has no parent, stop
             val parent = currentView.parent
-            if (parent is View) {
-                currentView = parent
+            currentView = if (parent is View) {
+                parent
             } else {
-                currentView = null
+                null
             }
         }
         return null

@@ -14,7 +14,7 @@ class HighlightOverlay @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    private val issues: List<AccessibilityIssue> = emptyList()
+    private val issues: List<AccessibilityIssue> = emptyList(),
 ) : View(context, attrs, defStyleAttr) {
 
     private val paint = Paint().apply {

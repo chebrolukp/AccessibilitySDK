@@ -48,9 +48,9 @@ class AccessibilityScanner(private val config: AccessibilityConfig) {
             detector.check(view)?.let { issues.add(it) }
         }
 
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                traverse(view.getChildAt(i), issues)
+        (view as? ViewGroup)?.let { group ->
+            for (i in 0 until group.childCount) {
+                traverse(group.getChildAt(i), issues)
             }
         }
     }
