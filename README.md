@@ -14,9 +14,9 @@ An automated accessibility auditing SDK for Android applications. This library h
 
 ## Visuals
 
-| Highlights & Tags | Summary Overlay |
-| :---: | :---: |
-| ![Highlights](screenshots/highlights.png) | ![Summary](screenshots/summary.png) |
+|                         Highlights & Tags                          |                          Summary Overlay                           |
+|:------------------------------------------------------------------:|:------------------------------------------------------------------:|
+| <img src="screenshots/screenshot1.png" width="200" height="500" /> | <img src="screenshots/screenshot2.png" width="200" height="500" /> |
 
 ## Quick Start
 
