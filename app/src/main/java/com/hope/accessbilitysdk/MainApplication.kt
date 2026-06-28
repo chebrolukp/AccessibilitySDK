@@ -2,6 +2,7 @@ package com.hope.accessbilitysdk
 
 import android.app.Application
 import com.hope.accessbilitysdk.library.AccessibilityMonitor
+import com.hope.accessbilitysdk.library.AccessibilityConfig
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -12,6 +13,8 @@ class MainApplication : Application() {
             logToLogcat(true)
             showHighlightOverlay(true)
             showSummaryOverlay(true)
+            exportReports(true)
+            exportFormat(AccessibilityConfig.ExportFormat.BOTH)
         }
     }
 }

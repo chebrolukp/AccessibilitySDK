@@ -11,6 +11,12 @@ class AccessibilityConfig {
     var showHighlightOverlay: Boolean = true
     var showSummaryOverlay: Boolean = true
     var logToLogcat: Boolean = true
+    var exportReports: Boolean = false
+    var exportFormat: ExportFormat = ExportFormat.JSON
+
+    enum class ExportFormat {
+        JSON, HTML, BOTH
+    }
 
     // DSL-friendly methods
     fun checkContrast(enabled: Boolean) { checkContrast = enabled }
@@ -22,4 +28,6 @@ class AccessibilityConfig {
     fun showHighlightOverlay(enabled: Boolean) { showHighlightOverlay = enabled }
     fun showSummaryOverlay(enabled: Boolean) { showSummaryOverlay = enabled }
     fun logToLogcat(enabled: Boolean) { logToLogcat = enabled }
+    fun exportReports(enabled: Boolean) { exportReports = enabled }
+    fun exportFormat(format: ExportFormat) { exportFormat = format }
 }

@@ -9,12 +9,14 @@ object AccessibilityMonitor {
 
     private var config = AccessibilityConfig()
     private var scanner = AccessibilityScanner(config)
+    private var exporter: ReportExporter? = null
 
     fun install(application: Application, block: (AccessibilityConfig.() -> Unit)? = null) {
         val newConfig = AccessibilityConfig()
         block?.invoke(newConfig)
         config = newConfig
         scanner = AccessibilityScanner(config)
+        exporter = ReportExporter(application)
 
         application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
@@ -44,6 +46,9 @@ object AccessibilityMonitor {
                                 android.view.ViewGroup.LayoutParams.MATCH_PARENT
                             ))
                         }
+
+                        // Export reports
+                        exporter?.export(issues, config)
                     }
                 }
             }

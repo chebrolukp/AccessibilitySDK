@@ -14,13 +14,15 @@ data class AccessibilityIssue(
     }
 
     override fun toString(): String {
-        val viewId = try {
+        return "⚠ $title ($viewId)\n$description\n"
+    }
+
+    val viewId: String
+        get() = try {
             view.resources.getResourceEntryName(view.id)
         } catch (e: Exception) {
             "no-id"
         }
-        return "⚠ $title ($viewId)\n$description\n"
-    }
 }
 
 interface AccessibilityDetector {
