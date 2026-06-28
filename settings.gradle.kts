@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Accessbility SDK"
 include(":app")
+include(":library")
  

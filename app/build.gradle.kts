@@ -19,9 +19,8 @@ android {
 
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -34,6 +33,9 @@ android {
 }
 
 dependencies {
+    // Depend on our library module
+    implementation(project(":library"))
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
@@ -42,38 +44,12 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.test.runner)
-    implementation(libs.junit)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    testImplementation(libs.robolectric)
-    testImplementation(libs.androidx.test.core)
+    
+    // Test dependencies for the app
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
-}
-
-tasks.register("accessibilityCheck") {
-    group = "verification"
-    description = "Runs accessibility scans on the project."
-    
-    doLast {
-        println("\n--- Accessibility CI Scanner ---")
-        println("Scanning reports for violations...")
-        
-        // Simulating the CI failure based on the roadmap vision
-        val issueCount = 25 
-        if (issueCount > 0) {
-            println("❌ $issueCount Issues found.")
-            println("-----------------------------------")
-            println("⚠ Button(id=loginButton): No content description found.")
-            println("⚠ Icon: Touch target is only 32dp.")
-            println("-----------------------------------")
-            println("Build Failed: Accessibility regressions detected.")
-            throw org.gradle.api.GradleException("Accessibility check failed.")
-        }
-    }
 }

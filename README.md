@@ -1,4 +1,4 @@
-# Accessibility SDK
+# Accessibility SDK 🚀
 
 An automated accessibility auditing SDK for Android applications. This library helps developers identify and fix accessibility issues in real-time by scanning the UI and providing visual feedback directly in the app.
 
@@ -14,9 +14,19 @@ An automated accessibility auditing SDK for Android applications. This library h
 
 ## Visuals
 
-|                         Highlights & Tags                          |                          Summary Overlay                           |
-|:------------------------------------------------------------------:|:------------------------------------------------------------------:|
-| <img src="screenshots/screenshot1.png" width="200" height="500" /> | <img src="screenshots/screenshot2.png" width="200" height="500" /> |
+| Highlights & Tags | Summary Overlay |
+| :---: | :---: |
+| ![Highlights](screenshots/screenshot1.png) | ![Summary](screenshots/screenshot2.png) |
+
+## Installation
+
+Add the library module to your project and include it in your `app/build.gradle.kts`:
+
+```kotlin
+dependencies {
+    implementation(project(":library"))
+}
+```
 
 ## Quick Start
 
@@ -31,18 +41,22 @@ class MainApplication : Application() {
         
         AccessibilityMonitor.install(this) {
             // Configuration options
-            checkContrast(true)
-            checkTouchTargets(true)
-            checkContentDescriptions(true)
+            checkContrast(enabled = true)
+            checkTouchTargets(enabled = true)
+            checkContentDescriptions(enabled = true)
+            checkDuplicates(enabled = true)
+            checkCompose(enabled = true)
+            checkFocusOrder(enabled = true)
             
             // Visual feedback options
-            showBorders(true)
-            showTags(true)
-            showSummaryOverlay(true)
+            showBorders(enabled = true)
+            showTags(enabled = true)
+            showSummaryOverlay(enabled = true)
             
             // Reporting
-            logToLogcat(true)
-            exportReports(true)
+            logToLogcat(enabled = true)
+            exportReports(enabled = true)
+            exportFormat(format = AccessibilityConfig.ExportFormat.BOTH)
         }
     }
 }
@@ -93,11 +107,11 @@ When an issue is detected, the SDK provides the following feedback:
 
 The SDK can be customized during `install`:
 
-- `showBorders(Boolean)`: Toggle the dashed border around views.
-- `showTags(Boolean)`: Toggle the "!" indicator.
-- `showSummaryOverlay(Boolean)`: Toggle the floating summary card.
-- `failBuildOnErrors(Boolean)`: If true, the `AccessibilityTestRule` will throw an `AssertionError`.
-- `exportFormat(ExportFormat)`: Choose between `JSON`, `HTML`, or `BOTH`.
+- `showBorders(enabled: Boolean)`: Toggle the dashed border around views.
+- `showTags(enabled: Boolean)`: Toggle the "!" indicator.
+- `showSummaryOverlay(enabled: Boolean)`: Toggle the floating summary card.
+- `failBuildOnErrors(enabled: Boolean)`: If true, the `AccessibilityTestRule` will throw an `AssertionError`.
+- `exportFormat(format: ExportFormat)`: Choose between `JSON`, `HTML`, or `BOTH`.
 
 ---
 *Note: This SDK is for development and testing purposes and should typically be initialized only in debug builds.*
