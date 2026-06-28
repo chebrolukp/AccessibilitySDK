@@ -32,8 +32,8 @@ object AccessibilityMonitor {
                         val decorView = activity.window.decorView as ViewGroup
                         
                         // Add highlighting
-                        if (config.showHighlightOverlay) {
-                            val highlightOverlay = HighlightOverlay(activity, issues = issues)
+                        if (config.showHighlightOverlay && (config.showBorders || config.showTags)) {
+                            val highlightOverlay = HighlightOverlay(activity, issues = issues, config = config)
                             decorView.addView(
                                 highlightOverlay,
                                 ViewGroup.LayoutParams(

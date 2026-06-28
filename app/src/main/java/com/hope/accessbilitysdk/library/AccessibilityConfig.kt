@@ -9,6 +9,8 @@ class AccessibilityConfig {
     var checkFocusOrder: Boolean = true
     
     var showHighlightOverlay: Boolean = true
+    var showBorders: Boolean = true
+    var showTags: Boolean = true
     var showSummaryOverlay: Boolean = true
     var logToLogcat: Boolean = true
     var exportReports: Boolean = false
@@ -27,6 +29,8 @@ class AccessibilityConfig {
     fun checkCompose(enabled: Boolean) { checkCompose = enabled }
     fun checkFocusOrder(enabled: Boolean) { checkFocusOrder = enabled }
     fun showHighlightOverlay(enabled: Boolean) { showHighlightOverlay = enabled }
+    fun showBorders(enabled: Boolean) { showBorders = enabled }
+    fun showTags(enabled: Boolean) { showTags = enabled }
     fun showSummaryOverlay(enabled: Boolean) { showSummaryOverlay = enabled }
     fun logToLogcat(enabled: Boolean) { logToLogcat = enabled }
     fun exportReports(enabled: Boolean) { exportReports = enabled }

@@ -10,11 +10,18 @@ class MainApplication : Application() {
         AccessibilityMonitor.install(this) {
             checkContrast(true)
             checkTouchTargets(true)
+            checkContentDescriptions(true)
+            checkDuplicates(true)
+            checkCompose(true)
+            checkFocusOrder(true)
             logToLogcat(true)
             showHighlightOverlay(true)
+            showBorders(true)
+            showTags(true)
             showSummaryOverlay(true)
             exportReports(true)
             exportFormat(AccessibilityConfig.ExportFormat.BOTH)
+            failBuildOnErrors(false)
         }
     }
 }

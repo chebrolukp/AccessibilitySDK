@@ -15,6 +15,7 @@ class HighlightOverlay @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     private val issues: List<AccessibilityIssue> = emptyList(),
+    private val config: AccessibilityConfig = AccessibilityConfig(),
 ) : View(context, attrs, defStyleAttr) {
 
     private val paint = Paint().apply {
@@ -110,12 +111,16 @@ class HighlightOverlay @JvmOverloads constructor(
             labelBackgroundPaint.color = color
 
             // Draw border
-            canvas.drawRect(bounds, paint)
+            if (config.showBorders) {
+                canvas.drawRect(bounds, paint)
+            }
 
             // Draw small tag
-            val tagText = "!"
-            canvas.drawRect(bounds.left, bounds.top - 40, bounds.left + 40, bounds.top, labelBackgroundPaint)
-            canvas.drawText(tagText, bounds.left + 12, bounds.top - 10, labelPaint)
+            if (config.showTags) {
+                val tagText = "!"
+                canvas.drawRect(bounds.left, bounds.top - 40, bounds.left + 40, bounds.top, labelBackgroundPaint)
+                canvas.drawText(tagText, bounds.left + 12, bounds.top - 10, labelPaint)
+            }
         }
     }
 }
