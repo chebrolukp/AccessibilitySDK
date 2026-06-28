@@ -13,6 +13,7 @@ class AccessibilityConfig {
     var logToLogcat: Boolean = true
     var exportReports: Boolean = false
     var exportFormat: ExportFormat = ExportFormat.JSON
+    var failBuildOnErrors: Boolean = false
 
     enum class ExportFormat {
         JSON, HTML, BOTH
@@ -30,4 +31,5 @@ class AccessibilityConfig {
     fun logToLogcat(enabled: Boolean) { logToLogcat = enabled }
     fun exportReports(enabled: Boolean) { exportReports = enabled }
     fun exportFormat(format: ExportFormat) { exportFormat = format }
+    fun failBuildOnErrors(enabled: Boolean) { failBuildOnErrors = enabled }
 }

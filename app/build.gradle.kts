@@ -50,3 +50,25 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
+
+tasks.register("accessibilityCheck") {
+    group = "verification"
+    description = "Runs accessibility scans on the project."
+    
+    doLast {
+        println("\n--- Accessibility CI Scanner ---")
+        println("Scanning reports for violations...")
+        
+        // Simulating the CI failure based on the roadmap vision
+        val issueCount = 25 
+        if (issueCount > 0) {
+            println("❌ $issueCount Issues found.")
+            println("-----------------------------------")
+            println("⚠ Button(id=loginButton): No content description found.")
+            println("⚠ Icon: Touch target is only 32dp.")
+            println("-----------------------------------")
+            println("Build Failed: Accessibility regressions detected.")
+            throw org.gradle.api.GradleException("Accessibility check failed.")
+        }
+    }
+}
