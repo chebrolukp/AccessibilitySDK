@@ -7,6 +7,7 @@ import androidx.test.runner.lifecycle.Stage
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import androidx.test.platform.app.InstrumentationRegistry
 
 class AccessibilityTestRule(private val config: AccessibilityConfig = AccessibilityConfig()) : TestRule {
 
